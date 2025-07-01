@@ -80,3 +80,10 @@ CREATE INDEX IF NOT EXISTS idx_message_support_utilisateur_id ON message_support
 CREATE INDEX IF NOT EXISTS idx_message_support_date_envoi ON message_support(date_envoi);
 CREATE INDEX IF NOT EXISTS idx_reservation_utilisateur_id ON reservation(utilisateur_id);
 CREATE INDEX IF NOT EXISTS idx_offre_location_vehicule_id ON offre_location(vehicule_id); 
+
+-- Insertion des utilisateurs à faire qu'une fois la base de données créée
+
+INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, adresse, role)
+VALUES
+  ('Customer1', 'Test', 'user1@email.com', 'password', '1990-01-01', 'AdresseTest', 'USER'),
+  ('Service1', 'Test', 'support1@email.com', 'password', '1985-05-10', 'AdresseTest', 'SUPPORT');

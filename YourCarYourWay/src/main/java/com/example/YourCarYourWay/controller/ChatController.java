@@ -8,6 +8,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,13 +61,30 @@ public class ChatController {
                 ChatMessage chatMsg = new ChatMessage();
                 chatMsg.setId(msg.getId());
                 chatMsg.setUtilisateurId(msg.getUtilisateurId());
-                chatMsg.setSender(""); // Optionnel : à remplir si tu veux afficher le nom
+                chatMsg.setSender("");
                 chatMsg.setContenu(msg.getContenu());
                 chatMsg.setType(msg.getType());
                 chatMsg.setStatut(msg.getStatut());
                 chatMsg.setDateEnvoi(msg.getDateEnvoi());
                 return chatMsg;
             }).collect(Collectors.toList());
+        }
+
+        @PostMapping("/send")
+        public ChatMessage sendMessageRest(@RequestBody ChatMessage message) {
+            // Mapper ChatMessage vers MessageSupport
+            MessageSupport entity = new MessageSupport();
+            entity.setUtilisateurId(message.getUtilisateurId());
+            entity.setType(message.getType());
+            entity.setContenu(message.getContenu());
+            entity.setStatut(message.getStatut());
+            entity.setDateEnvoi(message.getDateEnvoi());
+            // Sauvegarder en base
+            MessageSupport saved = messageSupportService.save(entity);
+            // Mettre à jour l'id et la dateEnvoi dans le ChatMessage à retourner
+            message.setId(saved.getId());
+            message.setDateEnvoi(saved.getDateEnvoi());
+            return message;
         }
     }
 }
