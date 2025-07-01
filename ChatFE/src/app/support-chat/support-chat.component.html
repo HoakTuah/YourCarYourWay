@@ -1,7 +1,7 @@
 <div class="chat-container">
     <div class="messages" style="height:300px;overflow-y:auto;border:1px solid #ccc;padding:10px;">
       <div *ngFor="let msg of messages">
-        <b>{{msg.from}}:</b> {{msg.content}}
+        <b>{{msg.sender}}:</b> {{msg.contenu}}
       </div>
     </div>
     <input [(ngModel)]="messageContent" placeholder="Votre message..." (keyup.enter)="sendMessage()" style="width:80%;" />

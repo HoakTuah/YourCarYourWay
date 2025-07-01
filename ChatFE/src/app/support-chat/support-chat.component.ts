@@ -13,10 +13,13 @@ import { Client, Message } from '@stomp/stompjs';
 })
 export class SupportChatComponent implements OnInit {
   private stompClient!: Client;
-  public messages: {from: string, content: string}[] = [];
+  public messages: {sender: string, contenu: string}[] = [];
   public messageContent: string = '';
 
-  ngOnInit() { this.connect(); }
+  ngOnInit() {
+    this.messages = [];
+    this.connect();
+  }
 
   connect() {
     this.stompClient = new Client({
@@ -26,6 +29,7 @@ export class SupportChatComponent implements OnInit {
     });
     this.stompClient.onConnect = () => {
       this.stompClient.subscribe('/topic/public', (message: Message) => {
+        console.log('Message reçu du backend :', message.body);
         this.messages.push(JSON.parse(message.body));
       });
     };
@@ -33,10 +37,15 @@ export class SupportChatComponent implements OnInit {
   }
 
   sendMessage() {
+    console.log('Message envoyé au backend :', {from: 'Support', content: this.messageContent});
     if (this.messageContent && this.stompClient.connected) {
       this.stompClient.publish({
         destination: '/app/chat.sendMessage',
-        body: JSON.stringify({from: 'Support', content: this.messageContent})
+        body: JSON.stringify({
+          contenu: this.messageContent,
+          type: 'SUPPORT_TO_USER',
+          statut: 'envoyé'
+        })
       });
       this.messageContent = '';
     }
