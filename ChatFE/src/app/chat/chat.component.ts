@@ -1,11 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common';
+import SockJS from 'sockjs-client';
+import { Client, Message } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-chat',
-  imports: [],
+  standalone: true, 
+  imports: [FormsModule, CommonModule], 
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.scss'
+  styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
+  private stompClient!: Client;
+  public messages: {from: string, content: string}[] = [];
+  public messageContent: string = '';
 
+  ngOnInit() {
+    this.connect();
+  }
+
+  connect() {
+    this.stompClient = new Client({
+      brokerURL: 'ws://localhost:8080/ws-chat',
+      webSocketFactory: () => new SockJS('http://localhost:8080/chat'),
+      reconnectDelay: 5000,
+    });
+
+    this.stompClient.onConnect = () => {
+      this.stompClient.subscribe('/topic/public', (message: Message) => {
+        this.messages.push(JSON.parse(message.body));
+      });
+    };
+
+    this.stompClient.activate();
+  }
+
+  sendMessage() {
+    if (this.messageContent && this.stompClient.connected) {
+      this.stompClient.publish({
+        destination: '/app/chat.sendMessage',
+        body: JSON.stringify({from: 'Utilisateur', content: this.messageContent})
+      });
+      this.messageContent = '';
+    }
+  }
 }
