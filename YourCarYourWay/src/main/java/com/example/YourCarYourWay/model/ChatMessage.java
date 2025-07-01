@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class ChatMessage {
     private Long id;
     private Long utilisateurId;
-    private String sender; // nom de l'utilisateur pour l'affichage
+    private String sender; 
     private String contenu;
     private String type;
     private String statut;
