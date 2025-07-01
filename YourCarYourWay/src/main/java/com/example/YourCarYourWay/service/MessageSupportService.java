@@ -23,6 +23,4 @@ public class MessageSupportService {
     public List<MessageSupport> findAll() {
         return messageSupportRepository.findAll();
     }
-
-    // You can add more methods as needed (e.g., findByUtilisateurId)
 }
