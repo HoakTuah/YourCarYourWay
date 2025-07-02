@@ -4,7 +4,10 @@
   </div>
   <div class="messages">
     <div *ngFor="let msg of messages" [ngClass]="{'from-client': msg.sender === 'Client', 'from-support': msg.sender !== 'Client'}" class="message">
-      <span class="sender">{{msg.sender}}:</span>
+      <span class="sender">
+        {{msg.sender}}
+        <span class="date" *ngIf="msg.dateEnvoi"> ({{ msg.dateEnvoi | date:'dd/MM/yyyy HH:mm' }})</span>:
+      </span>
       <span class="content">{{msg.contenu}}</span>
     </div>
   </div>
