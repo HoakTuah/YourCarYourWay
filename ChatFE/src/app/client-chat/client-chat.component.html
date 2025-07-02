@@ -1,9 +1,15 @@
 <div class="chat-container">
-    <div class="messages" style="height:300px;overflow-y:auto;border:1px solid #ccc;padding:10px;">
-      <div *ngFor="let msg of messages">
-        <b>{{msg.sender}}:</b> {{msg.contenu}}
-      </div>
+  <div class="chat-header">
+    <h3>Support Chat</h3>
+  </div>
+  <div class="messages">
+    <div *ngFor="let msg of messages" [ngClass]="{'from-client': msg.sender === 'Client', 'from-support': msg.sender !== 'Client'}" class="message">
+      <span class="sender">{{msg.sender}}:</span>
+      <span class="content">{{msg.contenu}}</span>
     </div>
-    <input [(ngModel)]="messageContent" placeholder="Votre message..." (keyup.enter)="sendMessage()" style="width:80%;" />
+  </div>
+  <div class="chat-input">
+    <input [(ngModel)]="messageContent" placeholder="Votre message..." (keyup.enter)="sendMessage()" />
     <button (click)="sendMessage()">Envoyer</button>
   </div>
+</div>
