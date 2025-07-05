@@ -3,7 +3,7 @@
     <h3>Support Chat</h3>
   </div>
   <div class="messages">
-    <div *ngFor="let msg of messages" [ngClass]="{'from-support': msg.sender === 'Support', 'from-client': msg.sender !== 'Support'}" class="message">
+    <div *ngFor="let msg of messages" [ngClass]="{'support-message': msg.type === 'SUPPORT_TO_USER', 'client-message': msg.type === 'USER_TO_SUPPORT'}" class="message">
       <span class="sender">
         {{msg.sender}}
         <span class="date" *ngIf="msg.dateEnvoi"> ({{ msg.dateEnvoi | date:'dd/MM/yyyy HH:mm' }})</span>:

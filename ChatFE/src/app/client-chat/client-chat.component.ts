@@ -18,7 +18,7 @@ import { Client, Message } from '@stomp/stompjs';
 })
 export class ClientChatComponent implements OnInit {
   private stompClient!: Client;
-  public messages: {sender: string, contenu: string, dateEnvoi?: string}[] = [];
+  public messages: {sender: string, contenu: string, dateEnvoi?: string, type?: string}[] = [];
   public messageContent: string = '';
 
   ngOnInit() {
@@ -57,6 +57,7 @@ export class ClientChatComponent implements OnInit {
         type: 'USER_TO_SUPPORT',
         statut: 'envoyé'
       };
+      
       this.stompClient.publish({
         destination: '/app/chat.sendMessage',
         body: JSON.stringify(outgoingMessage)
